@@ -13,3 +13,24 @@ vim.keymap.set({ "i", "v", "c", "t", "o" }, "kj", function()
 end, { noremap = true, silent = true, desc = "Exit modes with kj" })
 
 vim.keymap.set("n", "-", "<cmd>Oil<CR>")
+
+-- Open BrowserSync menu
+vim.keymap.set("n", "<leader>p", '<cmd>WhichKey "<leader>p"<CR>', { desc = "🔄 Open BrowserSync menu" })
+
+-- Start BrowserSync and TypeScript Compiler
+vim.keymap.set("n", "<leader>ps", function()
+  -- Start TypeScript compiler in watch mode
+  vim.system({ "tsc", "--watch" }, { detach = true })
+
+  -- Start BrowserSync
+  vim.system({ "browser-sync", "start", "--server", "--files", "*.html,*.css,*.js,*.ts" }, { detach = true })
+
+  print("✅ TypeScript compiler and BrowserSync server started!")
+end, { desc = "Start TypeScript and BrowserSync Server" })
+
+-- Stop BrowserSync processes
+vim.keymap.set("n", "<leader>pq", function()
+  -- Kill all BrowserSync processes
+  vim.cmd("!ps aux | grep '[b]rowser-sync' | awk '{print $2}' | xargs kill")
+  print("🛑 All BrowserSync processes stopped!")
+end, { desc = "Stop All BrowserSync Processes" })
