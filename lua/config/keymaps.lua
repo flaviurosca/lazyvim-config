@@ -34,3 +34,25 @@ vim.keymap.set("n", "<leader>pq", function()
   vim.cmd("!ps aux | grep '[b]rowser-sync' | awk '{print $2}' | xargs kill")
   print("🛑 All BrowserSync processes stopped!")
 end, { desc = "Stop All BrowserSync Processes" })
+
+vim.keymap.set("n", "K", function()
+  local curr_pos = vim.api.nvim_win_get_cursor(0)
+  local line = curr_pos[1] - 1
+  local col = curr_pos[2]
+  local diagnostics = vim.diagnostic.get(0)
+
+  local msgs = {}
+  for _, d in ipairs(diagnostics) do
+    if d.lnum == line and col >= d.col and col <= d.end_col then
+      table.insert(msgs, d.message)
+    end
+  end
+
+  if #msgs > 0 then
+    vim.lsp.util.open_floating_preview(msgs, "plaintext", {
+      border = "rounded",
+    })
+  else
+    vim.lsp.buf.hover()
+  end
+end, { desc = "Show diagnostics at cursor or LSP hover" })

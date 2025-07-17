@@ -3,3 +3,6 @@
 -- Add any additional options here
 --
 vim.opt.winbar = "%=%m %f"
+
+-- lock virtual edit
+vim.o.virtualedit = ""
